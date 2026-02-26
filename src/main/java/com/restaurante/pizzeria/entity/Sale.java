@@ -6,44 +6,33 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name = "sale")
 @Getter
 @Setter
-@Table(name = "sale")
 public class Sale {
+
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "status", nullable = false)
+    @Column(nullable = false)
     private boolean status = true;
 
-    @Column(name = "number_sale", length = 15,unique = true, nullable = false)
-    private String numberSale;
-
-    @Column(name = "dni", length = 11, nullable = false)
+    @Column(length = 11, nullable = false)
     private String dni;
 
-    @Column(name = "date", nullable = false)
+    @Column(nullable = false)
     private LocalDate date;
 
-    @Column(name = "client", length = 100, nullable = false)
+    @Column(length = 100, nullable = false)
     private String client;
 
-    @ManyToOne
-    private Product product;
+    @Column(nullable = false)
+    private Double total = 0.0;
 
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
-
-    @Column(name = "total", nullable = false)
-    private Double total;
-
-    @Column(name = "discount", nullable = false)
-    private Double discount;
-
-
-
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    private List<DetailSale> details;
 }

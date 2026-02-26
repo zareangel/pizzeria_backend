@@ -10,40 +10,32 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v2")
+@RequestMapping("/api/v2/products")
 public class ProductController {
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @GetMapping("/allProducts")
+
+    @GetMapping
     public List<Product> findAllActiveProducts() {
         return productService.findAllActiveProducts();
     }
 
-    @GetMapping("/code/{code}")
-    public List<Product> findProductByCode(@PathVariable String code) {
-        return productService.findProductByCode(code);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> saveProduct(@RequestBody Product product) {
-        try {
-            return ResponseEntity.ok(productService.saveProduct(product));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+        return ResponseEntity.ok(productService.saveProduct(product));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public Product updateProduct(@RequestBody Product product, @PathVariable int id) {
         return productService.updateProduct(product, id);
     }
 
-    @PutMapping("/updateStatus/{id}")
+    @PatchMapping("/{id}/status")
     public Product updateProductStatus(@PathVariable int id) {
         return productService.updateProductStatus(id);
     }
-
 }

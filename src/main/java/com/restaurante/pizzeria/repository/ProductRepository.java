@@ -9,14 +9,9 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-
-
-    @Query("SELECT P FROM Product P WHERE P.code = :code")
-    List<Product> findProductByCode(@Param("code") String code);
+    List<Product> findByStatusTrue();
 
     @Query("SELECT p FROM Product p WHERE p.status = true AND p.stock > 0")
     List<Product> findAllActiveProducts();
-
-    List<Product> findByStatusTrue();
-
 }
+

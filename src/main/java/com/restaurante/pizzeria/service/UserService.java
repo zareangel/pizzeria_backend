@@ -7,11 +7,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
-    public User validateUser(String name, String password) {
-        return userRepository.validateUser(name, password);
+    public User validateUser(String email, String password) {
+
+        User user = userRepository.findByEmail(email)
+                .orElse(null);
+
+        if (user == null) return null;
+
+        if (!user.getPassword().equals(password)) return null;
+
+        return user;
     }
 }
 

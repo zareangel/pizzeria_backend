@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
+
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -20,38 +21,35 @@ public class ProductService {
         return productRepository.findAllActiveProducts();
     }
 
-    public List<Product> findProductByCode(String code) {
-        return productRepository.findProductByCode(code);
-    }
     public Product saveProduct(Product product) {
         try {
             return productRepository.save(product);
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Este código ya ha sido registrado");
+            throw new RuntimeException("Error al guardar el producto");
         }
     }
 
     public Product updateProduct(Product product, int id) {
-        Product eProduct = productRepository.findById(id).orElseThrow(null);
-            if(eProduct != null){
-                eProduct.setStatus(product.isStatus());
-                eProduct.setCode(product.getCode());
-                eProduct.setName(product.getName());
-                eProduct.setPrice(product.getPrice());
-                eProduct.setStock(product.getStock());
-                eProduct.setSize(product.getSize());
 
-            }
-            return productRepository.save(product);
-    }
-    public Product updateProductStatus(int id) {
-        Product eProduct = productRepository.findById(id)
+        Product existing = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-        eProduct.setStatus(false);
-        return productRepository.save(eProduct);
+
+        existing.setName(product.getName());
+        existing.setPrice(product.getPrice());
+        existing.setStock(product.getStock());
+        existing.setStatus(product.isStatus());
+        existing.setImage(product.getImage());
+        existing.setDescription(product.getDescription());
+
+        return productRepository.save(existing);
     }
 
+    public Product updateProductStatus(int id) {
 
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-
+        existing.setStatus(false);
+        return productRepository.save(existing);
+    }
 }
