@@ -1,5 +1,6 @@
 package com.restaurante.pizzeria.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,5 +35,6 @@ public class Sale {
     private Double total = 0.0;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<DetailSale> details;
 }
